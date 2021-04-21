@@ -15,10 +15,18 @@ import world.bentobox.bentobox.database.objects.Island;
 
 public class EyeListener implements Listener {
 
+    private final BoxedEyes boxedEyes;
+
+    public EyeListener(BoxedEyes boxedEyes) {
+        this.boxedEyes = boxedEyes;
+    }
+
     @EventHandler
     public void onPlayerInteract(PlayerInteractEvent event) {
-        if (!(event.getAction().equals(Action.RIGHT_CLICK_AIR) || event.getAction().equals(Action.RIGHT_CLICK_BLOCK))) return;
-        if (event.getAction().equals(Action.RIGHT_CLICK_BLOCK) && (event.getClickedBlock() != null && event.getClickedBlock().getType().equals(Material.END_PORTAL_FRAME))) return;
+        if (!(event.getAction().equals(Action.RIGHT_CLICK_AIR) || event.getAction().equals(Action.RIGHT_CLICK_BLOCK)))
+            return;
+        if (event.getAction().equals(Action.RIGHT_CLICK_BLOCK) && (event.getClickedBlock() != null && event.getClickedBlock().getType().equals(Material.END_PORTAL_FRAME)))
+            return;
         if (event.getItem() != null && !event.getItem().getType().equals(Material.ENDER_EYE)) return;
         Player player = event.getPlayer();
         if (!BentoBox.getInstance().getIslands().getIslandAt(player.getLocation()).isPresent()) return;
@@ -29,6 +37,6 @@ public class EyeListener implements Listener {
             event.getItem().setAmount(event.getItem().getAmount() - 1);
         }
         EnderSignal enderEye = (EnderSignal) player.getWorld().spawnEntity(player.getLocation(), EntityType.ENDER_SIGNAL);
-        enderEye.setTargetLocation(new Location(player.getWorld(), island.getX() + 100.0, 30.0, island.getZ() + 100.0));
+        enderEye.setTargetLocation(new Location(player.getWorld(), island.getX() + boxedEyes.config.getDouble("EyeLocation.X-Offset"), boxedEyes.config.getDouble("EyeLocation.Y-Location"), island.getZ() + boxedEyes.config.getDouble("EyeLocation.Z-Offset")));
     }
 }
