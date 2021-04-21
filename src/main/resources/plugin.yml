@@ -1,0 +1,7 @@
+name: BoxedEyes
+version: ${project.version}
+main: me.fredthedoggy.boxedeyes.BoxedEyes
+api-version: 1.16
+authors: [ Fredthedoggy ]
+description: Custom Plugin for Boxed Eyes of Ender
+depend: [BentoBox]
