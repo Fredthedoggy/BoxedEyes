@@ -25,6 +25,8 @@ public class EyeListener implements Listener {
     public void onPlayerInteract(PlayerInteractEvent event) {
         if (!(event.getAction().equals(Action.RIGHT_CLICK_AIR) || event.getAction().equals(Action.RIGHT_CLICK_BLOCK)))
             return;
+        if (event.getItem() == null)
+            return;
         if (event.getAction().equals(Action.RIGHT_CLICK_BLOCK) && (event.getClickedBlock() != null && event.getClickedBlock().getType().equals(Material.END_PORTAL_FRAME)))
             return;
         if (event.getItem() != null && !event.getItem().getType().equals(Material.ENDER_EYE)) return;
@@ -34,7 +36,11 @@ public class EyeListener implements Listener {
         if (island.getCenter() == null) return;
         if (player.getGameMode() == GameMode.SPECTATOR) return;
         if (player.getGameMode() != GameMode.CREATIVE) {
-            event.getItem().setAmount(event.getItem().getAmount() - 1);
+            if (event.getItem().getAmount() > 1) {
+                event.getItem().setAmount(event.getItem().getAmount() - 1);
+            } else {
+                event.getItem().setAmount(0);
+            }
         }
         EnderSignal enderEye = (EnderSignal) player.getWorld().spawnEntity(player.getLocation(), EntityType.ENDER_SIGNAL);
         enderEye.setTargetLocation(new Location(player.getWorld(), island.getX() + boxedEyes.config.getDouble("EyeLocation.X-Offset"), boxedEyes.config.getDouble("EyeLocation.Y-Location"), island.getZ() + boxedEyes.config.getDouble("EyeLocation.Z-Offset")));
